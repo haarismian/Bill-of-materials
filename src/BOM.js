@@ -23,14 +23,15 @@ export default class BOM extends React.Component {
       <Layout className="layout">
         <Header>
           <div className="logo" />
+          <Title type={'success'}>Bill of Materials</Title>
         </Header>
         <Content style={{ padding: '0 50px' }}>
-          <div className="site-layout-content">Content</div>
+          {data.map((item, index) => (
+            <p key={index}>
+              Hello, {item.model} from {item.pk}!
+            </p>
+          ))}
         </Content>
-        <div>
-          <Title>Bill of Materials</Title>
-          <Title>{data[0].model}</Title>
-        </div>
       </Layout>
     );
   }
