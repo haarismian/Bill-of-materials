@@ -1,9 +1,10 @@
 import React from 'react';
+import axios from 'axios';
 
 //ant design
 
-import { Typography, Layout } from 'antd';
-const { Title } = Typography;
+import { Typography, Layout, InputNumber, Table } from 'antd';
+const { Title, Text } = Typography;
 const { Header, Content, Footer } = Layout;
 
 let data = require('./mock_bom_data.json');
@@ -11,12 +12,36 @@ let data = require('./mock_bom_data.json');
 export default class BOM extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+
+    this.state = { data: data };
+    this.bom_id = 1001;
+    this.columns = [
+      {
+        title: 'Part Number',
+        dataIndex: ['fields', 'specific_part'],
+        key: 'specific_part',
+      },
+      {
+        title: 'Unit Price',
+        dataIndex: ['fields', 'item_unit_cost'],
+        key: 'item_unit_cost',
+      },
+      {
+        title: 'Quantity',
+        dataIndex: ['fields', 'quantity'],
+        key: 'quantity',
+      },
+    ];
   }
 
-  componentDidMount() {
-    // First API call here
-  }
+  // Because this is a fake API call that breaks the code, I have commented it out
+  // componentDidMount() {
+  //   axios
+  //     .get(`https://www.mobiusmaterials.com/api/v1/bom/`, this.bom_id)
+  //     .then((res) => {
+  //       this.setState({ data: data });
+  //     });
+  // }
 
   render() {
     return (
@@ -26,11 +51,16 @@ export default class BOM extends React.Component {
           <Title type={'success'}>Bill of Materials</Title>
         </Header>
         <Content style={{ padding: '0 50px' }}>
-          {data.map((item, index) => (
-            <p key={index}>
-              Hello, {item.model} from {item.pk}!
-            </p>
-          ))}
+          <Table
+            columns={this.columns}
+            expandable={{
+              expandedRowRender: (record) => (
+                <p style={{ margin: 0 }}>{record.description}</p>
+              ),
+              rowExpandable: (record) => record.name !== 'Not Expandable',
+            }}
+            dataSource={this.state.data}
+          />
         </Content>
       </Layout>
     );
